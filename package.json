@@ -1,0 +1,26 @@
+{
+  "name": "ts-sqlite",
+  "version": "1.0.0",
+  "description": "sqlite wrapper written in TypeScript",
+  "author": "hayouung",
+  "license": "ISC",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hayouung/ts-sqlite.git"
+  },
+  "scripts": {
+    "lint": "tslint --fix -c tslint.json src/**/*.ts",
+    "build": "tsc",
+    "clean-build": "rmdir /s /q dist && tslint --fix -c tslint.json src/**/*.ts && tsc",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@types/sqlite3": "^3.1.5",
+    "sqlite3": "^4.0.6"
+  }
+}
