@@ -4,7 +4,7 @@ import { Sqlable } from "./Sqlable";
 export class CreateTableQuery implements Sqlable {
 	public columns: Column[];
 
-	constructor(public name: string) {
+	constructor(public name: string, public ifNotExists?: boolean) {
 		this.columns = [];
 	}
 
@@ -19,14 +19,20 @@ export class CreateTableQuery implements Sqlable {
 	}
 
 	public getSql(): string {
-		return `CREATE TABLE ${this.name} (${this.getSqlColumns()})`;
+		let query = "CREATE TABLE";
+		query += this.ifNotExists ? " IF NOT EXISTS" : "";
+		query += ` ${this.name}`;
+		query += ` (${this.getSqlColumns()})`;
+		return query;
 	}
 
 	private getSqlColumns(): string {
 		let str = "";
 
 		this.columns.forEach((column, index) => {
-			str += `${column.name} ${column.type} ${column.nullable ? "NOT NULL" : null}`;
+			str += column.name;
+			str += ` ${column.type}`;
+			str += column.nullable ? "" : " NOT NULL";
 
 			if (index !== this.columns.length - 1) {
 				str += ", ";

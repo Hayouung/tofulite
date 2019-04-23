@@ -20,20 +20,7 @@ export class Session {
 		});
 	}
 
-	private prepareStatement() {
-		
-	}
-
-	private getQuestionMarks(values: string[]): string {
-		let str = "(";
-		for (let i = 0; i < values.length; i++) {
-			if (i === values.length - 1) {
-				str += "?)";
-			} else {
-				str += "?, ";
-			}
-		}
-
-		return str;
+	private prepareStatement(): string {
+		return "";
 	}
 }
