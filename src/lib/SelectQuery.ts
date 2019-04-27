@@ -1,4 +1,4 @@
-import { ParameterisedSqlable, ParameterValue } from "./ParameterisedSqlable";
+import { ParameterisedSqlable } from "./ParameterisedSqlable";
 import { SelectWhere } from "./SelectWhere";
 
 export class SelectQuery implements ParameterisedSqlable {
@@ -25,20 +25,30 @@ export class SelectQuery implements ParameterisedSqlable {
 		return this;
 	}
 
+	public addWheres(wheres: SelectWhere[]): SelectQuery {
+		wheres.forEach(where => this.wheres.push(where));
+		return this;
+	}
+
 	public getSql(): string {
 		let query = "SELECT";
-		query += ` ${this.getSqlColumnsNames()}`;
+		query += ` ${this.getSqlColumnsNames()} FROM ${this.tableName}`;
 		query += this.wheres.length > 0 ? this.getSqlWheres() : "";
 		return query;
 	}
 
-	public getValues(): ParameterValue[] {
-		return this.wheres.map(w => {
-			if (w.value instanceof Array) {
-				return w.value.flat
-			}
-			return w.value;
-		});
+	public getValues(): string {
+		const values = this.wheres.map(where => where.value);
+		return values.reduce((acc: any[], curr) => acc.concat(curr), []).join(", ");
+		// const values: ParameterValue[] = [];
+		// this.wheres.forEach(where => {
+		// 	if (where.value instanceof Array) {
+		// 		where.value.forEach((w: string | number) => values.push(w));
+		// 	} else {
+		// 		values.push(where.value);
+		// 	}
+		// });
+		// return values;
 	}
 
 	private getSqlColumnsNames(): string {
@@ -60,16 +70,26 @@ export class SelectQuery implements ParameterisedSqlable {
 	}
 
 	private getSqlWheres(): string {
-		let str = "";
+		let str = " WHERE";
 
 		this.wheres.forEach((column, index) => {
-			str += column;
+			str += ` ${column.columnName}`;
 
-			if (index !== this.columnNames.length - 1) {
-				str += ", ";
+			if (column.value instanceof Array) {
+				str += ` IN (${this.getQuestionMarks(column.value)})`;
+			} else {
+				str += ` ${column.operator || "="} ?`;
+			}
+
+			if (index !== this.wheres.length - 1) {
+				str += ",";
 			}
 		});
 
 		return str;
+	}
+
+	private getQuestionMarks(value: any[]): string {
+		return value.map(v => "?").join(", ");
 	}
 }

@@ -1,6 +1,4 @@
 export interface ParameterisedSqlable {
 	getSql: () => string;
-	getValues: () => ParameterValue[];
+	getValues: () => string;
 }
-
-export type ParameterValue = string | number;
