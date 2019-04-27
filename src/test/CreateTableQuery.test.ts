@@ -14,10 +14,11 @@ describe("#CreateTableQuery", () => {
 		});
 
 		it("should get sql for create table query with multiple columns", () => {
-			ctq
-				.addColumn({ name: "COLUMN_ONE", type: "TEXT", nullable: false })
-				.addColumn({ name: "COLUMN_TWO", type: "INTEGER", nullable: true })
-				.addColumn({ name: "COLUMN_THREE", type: "TEXT", nullable: true });
+			ctq.addColumns([
+					{ name: "COLUMN_ONE", type: "TEXT", nullable: false },
+					{ name: "COLUMN_TWO", type: "INTEGER", nullable: true },
+					{ name: "COLUMN_THREE", type: "TEXT", nullable: true }
+				]);
 
 			expect(ctq.getSql()).toBe("CREATE TABLE TABLE_NAME (COLUMN_ONE TEXT NOT NULL, COLUMN_TWO INTEGER, COLUMN_THREE TEXT)");
 		});

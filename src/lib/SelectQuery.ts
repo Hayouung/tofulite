@@ -31,8 +31,7 @@ export class SelectQuery implements ParameterisedSqlable {
 	}
 
 	public getSql(): string {
-		let query = "SELECT";
-		query += ` ${this.getSqlColumnsNames()} FROM ${this.tableName}`;
+		let query = `SELECT ${this.getSqlColumnsNames()} FROM ${this.tableName}`;
 		query += this.wheres.length > 0 ? this.getSqlWheres() : "";
 		return query;
 	}
@@ -40,15 +39,6 @@ export class SelectQuery implements ParameterisedSqlable {
 	public getValues(): string {
 		const values = this.wheres.map(where => where.value);
 		return values.reduce((acc: any[], curr) => acc.concat(curr), []).join(", ");
-		// const values: ParameterValue[] = [];
-		// this.wheres.forEach(where => {
-		// 	if (where.value instanceof Array) {
-		// 		where.value.forEach((w: string | number) => values.push(w));
-		// 	} else {
-		// 		values.push(where.value);
-		// 	}
-		// });
-		// return values;
 	}
 
 	private getSqlColumnsNames(): string {
@@ -56,37 +46,17 @@ export class SelectQuery implements ParameterisedSqlable {
 			return "*";
 		}
 
-		let str = "";
-
-		this.columnNames.forEach((column, index) => {
-			str += column;
-
-			if (index !== this.columnNames.length - 1) {
-				str += ", ";
-			}
-		});
-
-		return str;
+		return this.columnNames.join(", ");
 	}
 
 	private getSqlWheres(): string {
-		let str = " WHERE";
-
-		this.wheres.forEach((column, index) => {
-			str += ` ${column.columnName}`;
-
-			if (column.value instanceof Array) {
-				str += ` IN (${this.getQuestionMarks(column.value)})`;
+		return " WHERE " + this.wheres.map(where => {
+			if (where.value instanceof Array) {
+				return `${where.columnName} IN (${this.getQuestionMarks(where.value)})`;
 			} else {
-				str += ` ${column.operator || "="} ?`;
+				return `${where.columnName} ${where.operator || "="} ?`;
 			}
-
-			if (index !== this.wheres.length - 1) {
-				str += ",";
-			}
-		});
-
-		return str;
+		}).join(", ");
 	}
 
 	private getQuestionMarks(value: any[]): string {
