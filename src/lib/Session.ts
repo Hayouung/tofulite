@@ -10,9 +10,20 @@ export class Session {
 	private db: sqlite3.Database;
 
 	constructor(filename: string) {
-		this.db = new sqlite3.Database(filename, err => {
-			if (err) console.error(err.message);
-			console.log("Database connected.");
+		this.db = new sqlite3.Database(filename || "", err => {
+			if (err) throw err;
+
+			switch (filename) {
+				case ":memory:":
+					console.log("Connected to in-memory database.");
+					break;
+				case "":
+					console.log("Connected to temp database on disk.");
+					break;
+				default:
+					console.log(`Connected to database ${filename}`);
+					break;
+			}
 		});
 	}
 
@@ -27,11 +38,28 @@ export class Session {
 	}
 
 	public select(selectQuery: SelectQuery): Promise<any[]> {
+		return this.allPreparedStatement(selectQuery);
+	}
+
+	public selectSingle(selectQuery: SelectQuery): Promise<any> {
+		return this.getPreparedStatement(selectQuery);
+	}
+
+	private runPreparedStatement(parameterisedSqlable: ParameterisedSqlable): void {
+		this.db.serialize(() => {
+			const stmt = this.db.prepare(parameterisedSqlable.getSql());
+
+			stmt.run(parameterisedSqlable.getValues());
+			stmt.finalize();
+		});
+	}
+
+	private allPreparedStatement(parameterisedSqlable: ParameterisedSqlable): Promise<any[]> {
 		return new Promise((resolve, reject) => {
 			this.db.serialize(() => {
-				const stmt = this.db.prepare(selectQuery.getSql());
+				const stmt = this.db.prepare(parameterisedSqlable.getSql());
 
-				stmt.all(selectQuery.getValues(), (err, rows) => {
+				stmt.all(parameterisedSqlable.getValues(), (err, rows) => {
 					if (err) reject(err);
 					resolve(rows);
 				});
@@ -40,12 +68,17 @@ export class Session {
 		});
 	}
 
-	private runPreparedStatement(parameterisedSqlable: ParameterisedSqlable): void {
-		return this.db.serialize(() => {
-			const stmt = this.db.prepare(parameterisedSqlable.getSql());
+	private getPreparedStatement(parameterisedSqlable: ParameterisedSqlable): Promise<any> {
+		return new Promise((resolve, reject) => {
+			this.db.serialize(() => {
+				const stmt = this.db.prepare(parameterisedSqlable.getSql());
 
-			stmt.run(parameterisedSqlable.getValues());
-			stmt.finalize();
+				stmt.get(parameterisedSqlable.getValues(), (err, row) => {
+					if (err) reject(err);
+					resolve(row);
+				});
+				stmt.finalize();
+			});
 		});
 	}
 }
