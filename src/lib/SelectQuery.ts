@@ -36,9 +36,9 @@ export class SelectQuery implements ParameterisedSqlable {
 		return query;
 	}
 
-	public getValues(): string {
+	public getValues(): string[] {
 		const values = this.wheres.map(where => where.value);
-		return values.reduce((acc: any[], curr) => acc.concat(curr), []).join(", ");
+		return values.reduce((acc: any[], curr) => acc.concat(curr), []);
 	}
 
 	private getSqlColumnsNames(): string {

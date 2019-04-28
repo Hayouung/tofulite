@@ -1,8 +1,11 @@
-import { Sqlable } from "./Sqlable";
+import { ParameterisedSqlable } from "./ParameterisedSqlable";
 
-export class InsertQuery implements Sqlable {
+export class InsertQuery implements ParameterisedSqlable {
 	public getSql(): string {
-		return "";
+		return "INSERT INTO TABLE_NAME (COLUMN_ONE, COLUMN_TWO) VALUES (?, ?)";
 	}
 
+	public getValues(): string[] {
+		return ["1", "2"];
+	}
 }

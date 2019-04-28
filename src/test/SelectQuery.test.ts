@@ -30,7 +30,7 @@ describe("#SelectQuery", () => {
 				{ columnName: "COLUMN_FOUR", value: 7, operator: ">" }
 			]);
 			expect(sq.getSql()).toBe("SELECT * FROM TABLE_NAME WHERE COLUMN_ONE IN (?, ?, ?), COLUMN_TWO = ?, COLUMN_THREE IN (?, ?), COLUMN_FOUR > ?");
-			expect(sq.getValues()).toBe("1, 2, 3, 4, 5, 6, 7");
+			expect(sq.getValues()).toEqual([1, 2, 3, 4, 5, 6, 7]);
 		});
 	});
 

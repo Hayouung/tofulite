@@ -27,18 +27,10 @@ export class CreateTableQuery implements Sqlable {
 	}
 
 	private getSqlColumns(): string {
-		let str = "";
-
-		this.columns.forEach((column, index) => {
-			str += column.name;
-			str += ` ${column.type}`;
+		return this.columns.map(column => {
+			let str = `${column.name} ${column.type}`;
 			str += column.nullable ? "" : " NOT NULL";
-
-			if (index !== this.columns.length - 1) {
-				str += ", ";
-			}
-		});
-
-		return str;
+			return str;
+		}).join(", ");
 	}
 }
