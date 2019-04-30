@@ -22,15 +22,15 @@ describe("#SelectQuery", () => {
 			expect(sq.getSql()).toBe("SELECT COLUMN_ONE, COLUMN_TWO, COLUMN_THREE FROM TABLE_NAME");
 		});
 
-		it("should get sql with where conditions and parameter values", () => {
+		it("should get sql with where conditions and parameter values and put ANDs and ORs correctly", () => {
 			sq.addWheres([
-				{ columnName: "COLUMN_ONE", value: [1, 2, 3] },
-				{ columnName: "COLUMN_TWO", value: 4 },
-				{ columnName: "COLUMN_THREE", value: [5, 6] },
-				{ columnName: "COLUMN_FOUR", value: 7, operator: ">" }
+				{ columnName: "COLUMN_ONE", value: [1, 2, 3], type: "AND" },
+				{ columnName: "COLUMN_TWO",  value: 4, type: "AND" },
+				{ columnName: "COLUMN_THREE", value: [5, 6], type: "OR" },
+				{ columnName: "COLUMN_FOUR", value: 7, type: "AND", operator: ">" }
 			]);
-			expect(sq.getSql()).toBe("SELECT * FROM TABLE_NAME WHERE COLUMN_ONE IN (?, ?, ?), COLUMN_TWO = ?, COLUMN_THREE IN (?, ?), COLUMN_FOUR > ?");
-			expect(sq.getValues()).toEqual([1, 2, 3, 4, 5, 6, 7]);
+			expect(sq.getSql()).toBe("SELECT * FROM TABLE_NAME WHERE COLUMN_ONE IN (?, ?, ?) AND COLUMN_TWO = ? AND COLUMN_FOUR > ? OR COLUMN_THREE IN (?, ?)");
+			expect(sq.getValues()).toEqual([1, 2, 3, 4, 7, 5, 6]);
 		});
 	});
 
@@ -41,7 +41,7 @@ describe("#SelectQuery", () => {
 			sq = new SelectQuery("TABLE_NAME", true);
 		});
 
-		it("should get sql for select statement with * if specified with select columns", () => {
+		it("should get sql for select statement with * even if specified with select columns", () => {
 			sq.selectColumn("COLUMN_ONE");
 			expect(sq.getSql()).toBe("SELECT * FROM TABLE_NAME");
 		});

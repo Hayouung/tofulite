@@ -1,9 +1,11 @@
+import { OrderBy } from "./OrderBy";
 import { ParameterisedSqlable } from "./ParameterisedSqlable";
 import { SelectWhere } from "./SelectWhere";
 
 export class SelectQuery implements ParameterisedSqlable {
 	public columnNames: string[];
 	public wheres: SelectWhere[];
+	public orderBy?: OrderBy;
 
 	constructor(public tableName: string, public star?: boolean) {
 		this.columnNames = [];
@@ -30,9 +32,15 @@ export class SelectQuery implements ParameterisedSqlable {
 		return this;
 	}
 
+	public setOrder(columnName: string, desc?: boolean): SelectQuery {
+		this.orderBy = { columnName, desc };
+		return this;
+	}
+
 	public getSql(): string {
 		let query = `SELECT ${this.getSqlColumnsNames()} FROM ${this.tableName}`;
-		query += this.wheres.length > 0 ? this.getSqlWheres() : "";
+		query += this.getSqlWheres();
+		query += this.getSqlOrderBy();
 		return query;
 	}
 
@@ -50,13 +58,35 @@ export class SelectQuery implements ParameterisedSqlable {
 	}
 
 	private getSqlWheres(): string {
-		return " WHERE " + this.wheres.map(where => {
+		if (this.wheres.length === 0) {
+			return "";
+		}
+
+		this.wheres.sort((a, b) => a.type === "AND" && b.type === "OR" ? -1 : 1);
+
+		let str = " WHERE ";
+
+		this.wheres.forEach((where, index) => {
+			str += index === 0 ? "" : ` ${where.type} `;
+
 			if (where.value instanceof Array) {
-				return `${where.columnName} IN (${this.getQuestionMarks(where.value)})`;
+				str += `${where.columnName} IN (${this.getQuestionMarks(where.value)})`;
 			} else {
-				return `${where.columnName} ${where.operator || "="} ?`;
+				str += `${where.columnName} ${where.operator || "="} ?`;
 			}
-		}).join(", ");
+		});
+
+		return str;
+	}
+
+	private getSqlOrderBy(): string {
+		if (!this.orderBy) {
+			return "";
+		}
+
+		let str = ` ORDER BY ${this.orderBy.columnName}`;
+		str += this.orderBy.desc ? " DESC" : " ASC";
+		return str;
 	}
 
 	private getQuestionMarks(value: any[]): string {

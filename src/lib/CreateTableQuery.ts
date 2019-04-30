@@ -29,7 +29,7 @@ export class CreateTableQuery implements Sqlable {
 	private getSqlColumns(): string {
 		return this.columns.map(column => {
 			let str = `${column.name} ${column.type}`;
-			str += column.nullable ? "" : " NOT NULL";
+			str += column.notNull ? " NOT NULL" : "";
 			return str;
 		}).join(", ");
 	}
