@@ -1,4 +1,4 @@
-import { SelectQuery } from "../lib/SelectQuery";
+import { SelectQuery } from "../src/lib/SelectQuery";
 
 describe("#SelectQuery", () => {
 	describe("without star specified", () => {

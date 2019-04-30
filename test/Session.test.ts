@@ -1,7 +1,7 @@
-import { CreateTableQuery } from "../lib/CreateTableQuery";
-import { InsertQuery } from "../lib/InsertQuery";
-import { SelectQuery } from "../lib/SelectQuery";
-import { Session } from "../lib/Session";
+import { CreateTableQuery } from "../src/lib/CreateTableQuery";
+import { InsertQuery } from "../src/lib/InsertQuery";
+import { SelectQuery } from "../src/lib/SelectQuery";
+import { Session } from "../src/lib/Session";
 
 describe("#Session", () => {
 	let session: Session;
