@@ -1,5 +1,5 @@
-import { InsertValue } from "./InsertValue";
-import { ParameterisedSqlable } from "./ParameterisedSqlable";
+import { InsertValue } from "../interfaces/InsertValue";
+import { ParameterisedSqlable } from "../interfaces/ParameterisedSqlable";
 
 export class InsertQuery implements ParameterisedSqlable {
 	public insertValues: InsertValue[];

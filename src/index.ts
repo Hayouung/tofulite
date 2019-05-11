@@ -1,10 +1,12 @@
-export * from "./lib/Column";
-export * from "./lib/CreateTableQuery";
-export * from "./lib/InsertQuery";
-export * from "./lib/InsertValue";
-export * from "./lib/OrderBy";
-export * from "./lib/ParameterisedSqlable";
-export * from "./lib/SelectQuery";
-export * from "./lib/SelectWhere";
 export * from "./lib/Session";
-export * from "./lib/Sqlable";
+
+export * from "./lib/queries/CreateTableQuery";
+export * from "./lib/queries/InsertQuery";
+export * from "./lib/queries/SelectQuery";
+
+export * from "./lib/interfaces/Column";
+export * from "./lib/interfaces/InsertValue";
+export * from "./lib/interfaces/OrderBy";
+export * from "./lib/interfaces/ParameterisedSqlable";
+export * from "./lib/interfaces/SelectWhere";
+export * from "./lib/interfaces/Sqlable";

@@ -1,4 +1,4 @@
-import { SelectQuery } from "../src/lib/SelectQuery";
+import { SelectQuery } from "../src/lib/queries/SelectQuery";
 
 describe("#SelectQuery", () => {
 	describe("without star specified", () => {
@@ -46,6 +46,18 @@ describe("#SelectQuery", () => {
 			it("should order by column descending", () => {
 				sq.setOrder("COLUMN_ONE", true);
 				expect(sq.getSql()).toBe("SELECT * FROM TABLE_NAME ORDER BY COLUMN_ONE DESC");
+			});
+		});
+
+		describe("select query with limit", () => {
+			it("should limit by value", () => {
+				sq.setLimit(5);
+				expect(sq.getSql()).toBe("SELECT * FROM TABLE_NAME LIMIT 5");
+			});
+
+			it("should not allow limit less than 0", () => {
+				sq.setLimit(-1);
+				expect(() => sq.getSql()).toThrow();
 			});
 		});
 	});

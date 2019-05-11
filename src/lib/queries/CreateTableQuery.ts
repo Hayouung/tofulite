@@ -1,5 +1,5 @@
-import { Column } from "./Column";
-import { Sqlable } from "./Sqlable";
+import { Column } from "../interfaces/Column";
+import { Sqlable } from "../interfaces/Sqlable";
 
 export class CreateTableQuery implements Sqlable {
 	public columns: Column[];

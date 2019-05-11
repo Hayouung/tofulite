@@ -1,11 +1,12 @@
-import { OrderBy } from "./OrderBy";
-import { ParameterisedSqlable } from "./ParameterisedSqlable";
-import { SelectWhere } from "./SelectWhere";
+import { OrderBy } from "../interfaces/OrderBy";
+import { ParameterisedSqlable } from "../interfaces/ParameterisedSqlable";
+import { SelectWhere } from "../interfaces/SelectWhere";
 
 export class SelectQuery implements ParameterisedSqlable {
 	public columnNames: string[];
 	public wheres: SelectWhere[];
 	public orderBy?: OrderBy;
+	public limit?: number;
 
 	constructor(public tableName: string, public star?: boolean) {
 		this.columnNames = [];
@@ -37,10 +38,16 @@ export class SelectQuery implements ParameterisedSqlable {
 		return this;
 	}
 
+	public setLimit(limit: number): SelectQuery {
+		this.limit = limit;
+		return this;
+	}
+
 	public getSql(): string {
 		let query = `SELECT ${this.getSqlColumnsNames()} FROM ${this.tableName}`;
 		query += this.getSqlWheres();
 		query += this.getSqlOrderBy();
+		query += this.getSqlLimit();
 		return query;
 	}
 
@@ -91,5 +98,17 @@ export class SelectQuery implements ParameterisedSqlable {
 
 	private getQuestionMarks(value: any[]): string {
 		return value.map(v => "?").join(", ");
+	}
+
+	private getSqlLimit(): string {
+		if (!this.limit) {
+			return "";
+		}
+
+		if (this.limit < 0) {
+			throw new Error("Cannot have limit less than 0");
+		}
+
+		return ` LIMIT ${this.limit}`;
 	}
 }
