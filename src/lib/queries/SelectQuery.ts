@@ -1,6 +1,7 @@
 import { OrderBy } from "../interfaces/OrderBy";
 import { ParameterisedSqlable } from "../interfaces/ParameterisedSqlable";
 import { SelectWhere } from "../interfaces/SelectWhere";
+import { QueryUtils } from "../QueryUtils";
 
 export class SelectQuery implements ParameterisedSqlable {
 	public columnNames: string[];
@@ -45,7 +46,7 @@ export class SelectQuery implements ParameterisedSqlable {
 
 	public getSql(): string {
 		let query = `SELECT ${this.getSqlColumnsNames()} FROM ${this.tableName}`;
-		query += this.getSqlWheres();
+		query += QueryUtils.getWheres(this.wheres);
 		query += this.getSqlOrderBy();
 		query += this.getSqlLimit();
 		return query;
@@ -64,28 +65,6 @@ export class SelectQuery implements ParameterisedSqlable {
 		return this.columnNames.join(", ");
 	}
 
-	private getSqlWheres(): string {
-		if (this.wheres.length === 0) {
-			return "";
-		}
-
-		this.wheres.sort((a, b) => a.type === "AND" && b.type === "OR" ? -1 : 1);
-
-		let str = " WHERE ";
-
-		this.wheres.forEach((where, index) => {
-			str += index === 0 ? "" : ` ${where.type} `;
-
-			if (where.value instanceof Array) {
-				str += `${where.columnName} IN (${this.getQuestionMarks(where.value)})`;
-			} else {
-				str += `${where.columnName} ${where.operator || "="} ?`;
-			}
-		});
-
-		return str;
-	}
-
 	private getSqlOrderBy(): string {
 		if (!this.orderBy) {
 			return "";
@@ -94,10 +73,6 @@ export class SelectQuery implements ParameterisedSqlable {
 		let str = ` ORDER BY ${this.orderBy.columnName}`;
 		str += this.orderBy.desc ? " DESC" : " ASC";
 		return str;
-	}
-
-	private getQuestionMarks(value: any[]): string {
-		return value.map(v => "?").join(", ");
 	}
 
 	private getSqlLimit(): string {

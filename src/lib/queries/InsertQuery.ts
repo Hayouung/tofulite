@@ -1,5 +1,6 @@
 import { InsertValue } from "../interfaces/InsertValue";
 import { ParameterisedSqlable } from "../interfaces/ParameterisedSqlable";
+import { QueryUtils } from "../QueryUtils";
 
 export class InsertQuery implements ParameterisedSqlable {
 	public insertValues: InsertValue[];
@@ -14,7 +15,7 @@ export class InsertQuery implements ParameterisedSqlable {
 	}
 
 	public getSql(): string {
-		return `INSERT INTO ${this.tableName} (${this.getSqlColumns()}) VALUES (${this.getQuestionMarks()})`;
+		return `INSERT INTO ${this.tableName} (${this.getSqlColumns()}) VALUES (${QueryUtils.getQuestionMarks(this.insertValues)})`;
 	}
 
 	public getValues(): string[] {
@@ -23,9 +24,5 @@ export class InsertQuery implements ParameterisedSqlable {
 
 	private getSqlColumns(): string {
 		return this.insertValues.map(v => v.columnName).join(", ");
-	}
-
-	private getQuestionMarks(): string {
-		return this.insertValues.map(v => "?").join(", ");
 	}
 }
