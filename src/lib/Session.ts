@@ -2,6 +2,7 @@ import * as sqlite3 from "sqlite3";
 import { ParameterisedSqlable } from "./interfaces/ParameterisedSqlable";
 import { CreateTableQuery } from "./queries/CreateTableQuery";
 import { DeleteQuery } from "./queries/DeleteQuery";
+import { DropTableQuery } from "./queries/DropTableQuery";
 import { InsertQuery } from "./queries/InsertQuery";
 import { SelectQuery } from "./queries/SelectQuery";
 
@@ -54,6 +55,12 @@ export class Session {
 	public createTable(createTableQuery: CreateTableQuery): void {
 		this.db.serialize(() => {
 			this.db.run(createTableQuery.getSql());
+		});
+	}
+
+	public dropTable(dropTableQuery: DropTableQuery): void {
+		this.db.serialize(() => {
+			this.db.run(dropTableQuery.getSql());
 		});
 	}
 

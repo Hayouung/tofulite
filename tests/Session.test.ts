@@ -1,5 +1,6 @@
 import { CreateTableQuery } from "../src/lib/queries/CreateTableQuery";
 import { DeleteQuery } from "../src/lib/queries/DeleteQuery";
+import { DropTableQuery } from "../src/lib/queries/DropTableQuery";
 import { InsertQuery } from "../src/lib/queries/InsertQuery";
 import { SelectQuery } from "../src/lib/queries/SelectQuery";
 import { Session } from "../src/lib/Session";
@@ -131,6 +132,19 @@ describe("#Session", () => {
 						expect(a[0]).toEqual({ COLUMN_ONE: "1", COLUMN_TWO: 2 });
 						expect(a[1]).toEqual({ COLUMN_ONE: "5", COLUMN_TWO: 6 });
 						done();
+					});
+				});
+
+				describe("drop table", () => {
+					beforeEach(() => {
+						session.dropTable(new DropTableQuery("TABLE_TWO"));
+					});
+
+					it("should drop table", () => {
+						session.getTables().then(tables => {
+							expect(tables.length).toBe(1);
+							expect(tables[0]).toBe("TABLE_ONE");
+						});
 					});
 				});
 			});
