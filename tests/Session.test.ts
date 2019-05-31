@@ -1,4 +1,5 @@
 import { CreateTableQuery } from "../src/lib/queries/CreateTableQuery";
+import { DeleteQuery } from "../src/lib/queries/DeleteQuery";
 import { InsertQuery } from "../src/lib/queries/InsertQuery";
 import { SelectQuery } from "../src/lib/queries/SelectQuery";
 import { Session } from "../src/lib/Session";
@@ -33,7 +34,7 @@ describe("#Session", () => {
 			});
 		});
 
-		describe("insert and select tables", () => {
+		describe("insert and select rows", () => {
 			beforeEach(() => {
 				session.insert(new InsertQuery("TABLE_ONE").setValues([
 					{ columnName: "COLUMN_ONE", value: 1 },
@@ -112,6 +113,25 @@ describe("#Session", () => {
 				session.select(new SelectQuery("TABLE_ONE").setLimit(2)).then(a => {
 					expect(a.length).toBe(2);
 					done();
+				});
+			});
+
+			describe("delete rows", () => {
+				beforeEach(() => {
+					session.delete(new DeleteQuery("TABLE_ONE").addWheres([
+						{columnName: "COLUMN_ONE", type: "AND", value: "3"}
+					]));
+				});
+
+				it("should have delete row", done => {
+					const sq = new SelectQuery("TABLE_ONE");
+
+					session.select(sq).then(a => {
+						expect(a.length).toEqual(2);
+						expect(a[0]).toEqual({ COLUMN_ONE: "1", COLUMN_TWO: 2 });
+						expect(a[1]).toEqual({ COLUMN_ONE: "5", COLUMN_TWO: 6 });
+						done();
+					});
 				});
 			});
 		});

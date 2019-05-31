@@ -1,6 +1,7 @@
 import * as sqlite3 from "sqlite3";
 import { ParameterisedSqlable } from "./interfaces/ParameterisedSqlable";
 import { CreateTableQuery } from "./queries/CreateTableQuery";
+import { DeleteQuery } from "./queries/DeleteQuery";
 import { InsertQuery } from "./queries/InsertQuery";
 import { SelectQuery } from "./queries/SelectQuery";
 
@@ -66,6 +67,10 @@ export class Session {
 
 	public selectSingle(selectQuery: SelectQuery): Promise<any> {
 		return this.getPreparedStatement(selectQuery);
+	}
+
+	public delete(deleteQuery: DeleteQuery): void {
+		return this.runPreparedStatement(deleteQuery);
 	}
 
 	private runPreparedStatement(parameterisedSqlable: ParameterisedSqlable): void {
