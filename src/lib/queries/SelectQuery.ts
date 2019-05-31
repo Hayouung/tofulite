@@ -20,7 +20,7 @@ export class SelectQuery implements ParameterisedSqlable {
 	}
 
 	public selectColumns(columnNames: string[]): SelectQuery {
-		columnNames.forEach(columnName => this.columnNames.push(columnName));
+		columnNames.forEach(columnName => this.selectColumn(columnName));
 		return this;
 	}
 
@@ -30,7 +30,7 @@ export class SelectQuery implements ParameterisedSqlable {
 	}
 
 	public addWheres(wheres: SelectWhere[]): SelectQuery {
-		wheres.forEach(where => this.wheres.push(where));
+		wheres.forEach(where => this.addWhere(where));
 		return this;
 	}
 
