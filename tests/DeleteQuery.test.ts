@@ -1,4 +1,4 @@
-import { DeleteQuery } from "../src/lib/queries/DeleteQuery";
+import { DeleteQuery } from "../src/index";
 
 describe("#DeleteQuery", () => {
 	let dq: DeleteQuery;

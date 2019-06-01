@@ -1,4 +1,4 @@
-import { InsertQuery } from "../src/lib/queries/InsertQuery";
+import { InsertQuery } from "../src/index";
 
 describe("#DeleteQuery", () => {
 	let iq: InsertQuery;

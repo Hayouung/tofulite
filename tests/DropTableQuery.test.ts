@@ -1,4 +1,4 @@
-import { DropTableQuery } from "../src/lib/queries/DropTableQuery";
+import { DropTableQuery } from "../src/index";
 
 describe("#DropTableQuery", () => {
 	let dtq: DropTableQuery;

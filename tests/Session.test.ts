@@ -1,9 +1,4 @@
-import { CreateTableQuery } from "../src/lib/queries/CreateTableQuery";
-import { DeleteQuery } from "../src/lib/queries/DeleteQuery";
-import { DropTableQuery } from "../src/lib/queries/DropTableQuery";
-import { InsertQuery } from "../src/lib/queries/InsertQuery";
-import { SelectQuery } from "../src/lib/queries/SelectQuery";
-import { Session } from "../src/lib/Session";
+import { CreateTableQuery, DeleteQuery, DropTableQuery, InsertQuery, SelectQuery, Session } from "../src/index";
 
 describe("#Session", () => {
 	let session: Session;

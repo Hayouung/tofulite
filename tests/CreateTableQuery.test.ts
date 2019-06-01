@@ -1,4 +1,4 @@
-import { CreateTableQuery } from "../src/lib/queries/CreateTableQuery";
+import { CreateTableQuery } from "../src/index";
 
 describe("#CreateTableQuery", () => {
 	describe("without if not exists flag", () => {

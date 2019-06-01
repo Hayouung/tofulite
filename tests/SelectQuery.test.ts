@@ -1,4 +1,4 @@
-import { SelectQuery } from "../src/lib/queries/SelectQuery";
+import { SelectQuery } from "../src/index";
 
 describe("#SelectQuery", () => {
 	let sq: SelectQuery;
