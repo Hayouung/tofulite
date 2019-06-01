@@ -7,7 +7,7 @@ import { InsertQuery } from "./queries/InsertQuery";
 import { SelectQuery } from "./queries/SelectQuery";
 
 export class Session {
-	private db: sqlite3.Database;
+	public readonly db: sqlite3.Database;
 
 	private constructor(filename: string, verbose?: boolean) {
 		this.db = new sqlite3.Database(filename || "", err => {
