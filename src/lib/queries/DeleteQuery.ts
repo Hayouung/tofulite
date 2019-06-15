@@ -1,6 +1,6 @@
 import { ParameterisedSqlable } from "../interfaces/ParameterisedSqlable";
 import { SelectWhere } from "../interfaces/SelectWhere";
-import { QueryUtils } from "../QueryUtils";
+import { getWheres } from "../QueryUtils";
 
 export class DeleteQuery implements ParameterisedSqlable {
 	public wheres: SelectWhere[];
@@ -21,7 +21,7 @@ export class DeleteQuery implements ParameterisedSqlable {
 
 	public getSql(): string {
 		let str = `DELETE FROM ${this.tableName}`;
-		str += QueryUtils.getWheres(this.wheres);
+		str += getWheres(this.wheres);
 		return str;
 	}
 
