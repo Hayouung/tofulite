@@ -5,7 +5,17 @@ export function getWheres(wheres: SelectWhere[]): string {
 		return "";
 	}
 
-	wheres.sort((a, b) => a.type === "AND" && b.type === "OR" ? -1 : 1);
+	wheres.sort((a, b) => {
+		if (a.type === "AND" && b.type === "OR") {
+			return -1;
+		}
+
+		if (a.type === "OR" && b.type === "AND") {
+			return 1;
+		}
+
+		return 0;
+	});
 
 	let str = " WHERE ";
 
