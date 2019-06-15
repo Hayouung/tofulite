@@ -9,44 +9,22 @@ import { SelectQuery } from "./queries/SelectQuery";
 export class Session {
 	public readonly db: Database;
 
-	private constructor(filename: string | Database, verbose?: boolean) {
-		if (filename instanceof Database) {
-			this.db = filename;
-			if (verbose) console.log("Attached existing sqlite db connection");
-		} else {
-			this.db = new Database(filename || "", err => {
-				if (err) throw err;
-				if (verbose) {
-					switch (filename) {
-						case ":memory:":
-							console.log("Connected to in-memory database.");
-							break;
-						case "":
-							console.log("Connected to temp database on disk.");
-							break;
-						default:
-							console.log(`Connected to database ${filename}`);
-							break;
-					}
-				}
-			});
-		}
+	constructor(filename: Database) {
+		this.db = filename;
 	}
 
-	public static attachConnection(connection: Database, verbose?: boolean): Session {
-		return new this(connection, verbose);
+	public static inMemory(): Session {
+		return Session.fromFile(":memory:");
 	}
 
-	public static inMemory(verbose?: boolean): Session {
-		return new this(":memory:", verbose);
+	public static anonymous(): Session {
+		return Session.fromFile("");
 	}
 
-	public static anonymous(verbose?: boolean): Session {
-		return new this("", verbose);
-	}
-
-	public static fromFile(fileName: string, verbose?: boolean): Session {
-		return new this(fileName, verbose);
+	public static fromFile(filename: string): Session {
+		return new this(new Database(filename || "", err => {
+			if (err) throw err;
+		}));
 	}
 
 	public getTables(): Promise<any[]> {

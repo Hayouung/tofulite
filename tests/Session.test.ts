@@ -146,8 +146,9 @@ describe("#Session", () => {
 					describe("attach connection", () => {
 						let attached: Session;
 
-						beforeEach(() => {
-							attached = Session.attachConnection(session.db);
+						beforeEach(done => {
+							attached = new Session(session.db);
+							done();
 						});
 
 						it("should create new instance of Session with an existing db connection", done => {
