@@ -135,10 +135,27 @@ describe("#Session", () => {
 						session.dropTable(new DropTableQuery("TABLE_TWO"));
 					});
 
-					it("should drop table", () => {
+					it("should drop table", done => {
 						session.getTables().then(tables => {
 							expect(tables.length).toBe(1);
 							expect(tables[0]).toBe("TABLE_ONE");
+							done();
+						});
+					});
+
+					describe("attach connection", () => {
+						let attached: Session;
+
+						beforeEach(() => {
+							attached = Session.attachConnection(session.db);
+						});
+
+						it("should create new instance of Session with an existing db connection", done => {
+							attached.getTables().then(tables => {
+								expect(tables.length).toBe(1);
+								expect(tables[0]).toBe("TABLE_ONE");
+								done();
+							});
 						});
 					});
 				});

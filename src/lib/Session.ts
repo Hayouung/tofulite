@@ -1,4 +1,4 @@
-import * as sqlite3 from "sqlite3";
+import { Database } from "sqlite3";
 import { ParameterisedSqlable } from "./interfaces/ParameterisedSqlable";
 import { CreateTableQuery } from "./queries/CreateTableQuery";
 import { DeleteQuery } from "./queries/DeleteQuery";
@@ -7,26 +7,34 @@ import { InsertQuery } from "./queries/InsertQuery";
 import { SelectQuery } from "./queries/SelectQuery";
 
 export class Session {
-	public readonly db: sqlite3.Database;
+	public readonly db: Database;
 
-	private constructor(filename: string, verbose?: boolean) {
-		this.db = new sqlite3.Database(filename || "", err => {
-			if (err) throw err;
-
-			if (verbose) {
-				switch (filename) {
-					case ":memory:":
-						console.log("Connected to in-memory database.");
-						break;
-					case "":
-						console.log("Connected to temp database on disk.");
-						break;
-					default:
-						console.log(`Connected to database ${filename}`);
-						break;
+	private constructor(filename: string | Database, verbose?: boolean) {
+		if (filename instanceof Database) {
+			this.db = filename;
+			if (verbose) console.log("Attached existing sqlite db connection");
+		} else {
+			this.db = new Database(filename || "", err => {
+				if (err) throw err;
+				if (verbose) {
+					switch (filename) {
+						case ":memory:":
+							console.log("Connected to in-memory database.");
+							break;
+						case "":
+							console.log("Connected to temp database on disk.");
+							break;
+						default:
+							console.log(`Connected to database ${filename}`);
+							break;
+					}
 				}
-			}
-		});
+			});
+		}
+	}
+
+	public static attachConnection(connection: Database, verbose?: boolean): Session {
+		return new this(connection, verbose);
 	}
 
 	public static inMemory(verbose?: boolean): Session {
@@ -78,6 +86,10 @@ export class Session {
 
 	public delete(deleteQuery: DeleteQuery): void {
 		return this.runPreparedStatement(deleteQuery);
+	}
+
+	public closeConnection(): void {
+		this.db.close();
 	}
 
 	private runPreparedStatement(parameterisedSqlable: ParameterisedSqlable): void {
