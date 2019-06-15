@@ -1,5 +1,5 @@
 # ts-sqlite
-A wrapper for the [sqlite3](https://www.npmjs.com/package/sqlite3) module because SQL scripts are hard to remember.
+A wrapper for the [sqlite3](https://www.npmjs.com/package/sqlite3) module written in TypeScript because SQL scripts are hard to remember.
 
 ![CI Status](https://travis-ci.org/Hayouung/ts-sqlite.svg?branch=master)
 
