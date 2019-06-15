@@ -6,12 +6,12 @@ export function getWheres(wheres: SelectWhere[]): string {
 	}
 
 	wheres.sort((a, b) => {
-		if (a.type === "AND" && b.type === "OR") {
-			return -1;
-		}
-
 		if (a.type === "OR" && b.type === "AND") {
 			return 1;
+		}
+
+		if (a.type === "AND" && b.type === "OR") {
+			return -1;
 		}
 
 		return 0;
