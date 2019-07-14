@@ -1,4 +1,4 @@
-import * as sqlite3 from "sqlite3";
+import { Database } from "sqlite3";
 import { ParameterisedSqlable } from "./interfaces/ParameterisedSqlable";
 import { CreateTableQuery } from "./queries/CreateTableQuery";
 import { DeleteQuery } from "./queries/DeleteQuery";
@@ -7,38 +7,24 @@ import { InsertQuery } from "./queries/InsertQuery";
 import { SelectQuery } from "./queries/SelectQuery";
 
 export class Session {
-	public readonly db: sqlite3.Database;
+	public readonly db: Database;
 
-	private constructor(filename: string, verbose?: boolean) {
-		this.db = new sqlite3.Database(filename || "", err => {
+	constructor(filename: Database) {
+		this.db = filename;
+	}
+
+	public static inMemory(): Session {
+		return Session.fromFile(":memory:");
+	}
+
+	public static anonymous(): Session {
+		return Session.fromFile("");
+	}
+
+	public static fromFile(filename: string): Session {
+		return new this(new Database(filename || "", err => {
 			if (err) throw err;
-
-			if (verbose) {
-				switch (filename) {
-					case ":memory:":
-						console.log("Connected to in-memory database.");
-						break;
-					case "":
-						console.log("Connected to temp database on disk.");
-						break;
-					default:
-						console.log(`Connected to database ${filename}`);
-						break;
-				}
-			}
-		});
-	}
-
-	public static inMemory(verbose?: boolean): Session {
-		return new this(":memory:", verbose);
-	}
-
-	public static anonymous(verbose?: boolean): Session {
-		return new this("", verbose);
-	}
-
-	public static fromFile(fileName: string, verbose?: boolean): Session {
-		return new this(fileName, verbose);
+		}));
 	}
 
 	public getTables(): Promise<any[]> {
@@ -78,6 +64,10 @@ export class Session {
 
 	public delete(deleteQuery: DeleteQuery): void {
 		return this.runPreparedStatement(deleteQuery);
+	}
+
+	public closeConnection(): void {
+		this.db.close();
 	}
 
 	private runPreparedStatement(parameterisedSqlable: ParameterisedSqlable): void {

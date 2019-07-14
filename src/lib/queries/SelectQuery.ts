@@ -1,7 +1,7 @@
 import { OrderBy } from "../interfaces/OrderBy";
 import { ParameterisedSqlable } from "../interfaces/ParameterisedSqlable";
 import { SelectWhere } from "../interfaces/SelectWhere";
-import { QueryUtils } from "../QueryUtils";
+import { getWheres } from "../QueryUtils";
 
 export class SelectQuery implements ParameterisedSqlable {
 	public columnNames: string[];
@@ -46,7 +46,7 @@ export class SelectQuery implements ParameterisedSqlable {
 
 	public getSql(): string {
 		let query = `SELECT ${this.getSqlColumnsNames()} FROM ${this.tableName}`;
-		query += QueryUtils.getWheres(this.wheres);
+		query += getWheres(this.wheres);
 		query += this.getSqlOrderBy();
 		query += this.getSqlLimit();
 		return query;
