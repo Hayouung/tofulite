@@ -1,34 +1,36 @@
 {
-  "name": "ts-sqlite",
-  "version": "1.0.0",
-  "description": "sqlite wrapper written in TypeScript",
-  "author": "hayouung",
-  "license": "ISC",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Hayouung/ts-sqlite.git"
-  },
-  "scripts": {
-    "lint": "tslint --fix -c tslint.json src/**/*.ts",
-    "build": "tsc",
-    "clean-build": "rmdir /s /q dist && tslint --fix -c tslint.json src/**/*.ts && tsc",
-    "prepare": "npm run build",
-    "test": "jest"
-  },
-  "dependencies": {
-    "sqlite3": "^4.0.9"
-  },
-  "devDependencies": {
-    "@types/jest": "^24.0.15",
-    "@types/sqlite3": "^3.1.5",
-    "jest": "^24.8.0",
-    "ts-jest": "^24.0.2",
-    "tslint": "^5.18.0",
-    "typescript": "^3.5.3"
-  }
+    "name": "ts-sqlite",
+    "version": "1.0.0",
+    "description": "sqlite wrapper written in TypeScript",
+    "author": "hayouung",
+    "license": "ISC",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Hayouung/ts-sqlite.git"
+    },
+    "scripts": {
+        "lint": "eslint src/**.ts",
+        "build": "tsc",
+        "clean": "tsc --build --clean",
+        "prepare": "tsc",
+        "test": "ts-node jasmine.ts"
+    },
+    "dependencies": {
+        "sqlite3": "^4.0.9"
+    },
+    "devDependencies": {
+        "@types/jasmine": "^3.4.6",
+        "@types/sqlite3": "^3.1.5",
+        "@typescript-eslint/eslint-plugin": "^2.6.1",
+        "@typescript-eslint/parser": "^2.6.1",
+        "eslint": "^6.6.0",
+        "jasmine": "^3.5.0",
+        "ts-node": "^8.4.1",
+        "typescript": "^3.7.2"
+    }
 }

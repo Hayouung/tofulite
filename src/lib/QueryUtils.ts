@@ -1,37 +1,37 @@
 import { SelectWhere } from "./interfaces/SelectWhere";
 
 export function getWheres(wheres: SelectWhere[]): string {
-	if (wheres.length === 0) {
-		return "";
-	}
+    if (wheres.length === 0) {
+        return "";
+    }
 
-	wheres.sort((a, b) => {
-		if (a.type === "OR" && b.type === "AND") {
-			return 1;
-		}
+    wheres.sort((a, b) => {
+        if (a.type === "OR" && b.type === "AND") {
+            return 1;
+        }
 
-		if (a.type === "AND" && b.type === "OR") {
-			return -1;
-		}
+        if (a.type === "AND" && b.type === "OR") {
+            return -1;
+        }
 
-		return 0;
-	});
+        return 0;
+    });
 
-	let str = " WHERE ";
+    let str = " WHERE ";
 
-	wheres.forEach((where, index) => {
-		str += index === 0 ? "" : ` ${where.type} `;
+    wheres.forEach((where, index) => {
+        str += index === 0 ? "" : ` ${where.type} `;
 
-		if (where.value instanceof Array) {
-			str += `${where.columnName} IN (${getQuestionMarks(where.value)})`;
-		} else {
-			str += `${where.columnName} ${where.operator || "="} ?`;
-		}
-	});
+        if (where.value instanceof Array) {
+            str += `${where.columnName} IN (${getQuestionMarks(where.value)})`;
+        } else {
+            str += `${where.columnName} ${where.operator || "="} ?`;
+        }
+    });
 
-	return str;
+    return str;
 }
 
 export function getQuestionMarks(values: any[]): string {
-	return values.map(v => "?").join(", ");
+    return values.map(v => "?").join(", ");
 }
