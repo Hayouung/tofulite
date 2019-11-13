@@ -1,3 +1,3 @@
 export interface Sqlable {
-	getSql: () => string;
+  getSql: () => string;
 }

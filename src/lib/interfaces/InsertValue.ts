@@ -1,4 +1,4 @@
 export interface InsertValue {
-	columnName: string;
-	value: string | number;
+  columnName: string;
+  value: string | number;
 }

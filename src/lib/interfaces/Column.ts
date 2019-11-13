@@ -1,5 +1,5 @@
 export interface Column {
-	name: string;
-	type: "TEXT" | "INTEGER";
-	notNull?: boolean;
+  name: string;
+  type: "TEXT" | "INTEGER";
+  notNull?: boolean;
 }

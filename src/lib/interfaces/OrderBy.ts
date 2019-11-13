@@ -1,4 +1,4 @@
 export interface OrderBy {
-	columnName: string;
-	desc?: boolean;
+  columnName: string;
+  desc?: boolean;
 }
