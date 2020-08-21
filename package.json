@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "sqlite wrapper written in TypeScript",
   "author": "hayouung",
-  "license": "ISC",
+  "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -14,23 +14,23 @@
     "url": "git+https://github.com/Hayouung/ts-sqlite.git"
   },
   "scripts": {
-    "lint": "eslint src/**.ts",
-    "build": "tsc",
-    "clean": "tsc --build --clean",
-    "prepare": "tsc",
-    "test": "ts-node jasmine.ts"
+    "lint-fix": "eslint src/**/*.ts --fix",
+    "build": "del-cli dist && tsc",
+    "prepare": "npm run build",
+    "test": "ts-node --project tsconfig.spec.json jasmine.ts"
   },
   "dependencies": {
-    "sqlite3": "^4.0.9"
+    "sqlite3": "^4.2.0"
   },
   "devDependencies": {
-    "@types/jasmine": "^3.4.6",
-    "@types/sqlite3": "^3.1.5",
-    "@typescript-eslint/eslint-plugin": "^2.6.1",
-    "@typescript-eslint/parser": "^2.6.1",
-    "eslint": "^6.6.0",
-    "jasmine": "^3.5.0",
-    "ts-node": "^8.4.1",
-    "typescript": "^3.7.2"
+    "@types/jasmine": "^3.5.13",
+    "@types/sqlite3": "^3.1.6",
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
+    "@typescript-eslint/parser": "^2.34.0",
+    "del-cli": "^3.0.1",
+    "eslint": "^6.8.0",
+    "jasmine": "^3.6.1",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.7"
   }
 }

@@ -33,5 +33,5 @@ export function getWheres(wheres: SelectWhere[]): string {
 }
 
 export function getQuestionMarks(values: any[]): string {
-  return values.map(v => "?").join(", ");
+  return values.map(() => "?").join(", ");
 }

@@ -1,6 +1,6 @@
-import { InsertValue } from "../interfaces/InsertValue";
-import { ParameterisedSqlable, Value } from "../interfaces/ParameterisedSqlable";
-import { getQuestionMarks } from "../QueryUtils";
+import { InsertValue } from "../../interfaces/InsertValue";
+import { ParameterisedSqlable, Value } from "../../interfaces/ParameterisedSqlable";
+import { getQuestionMarks } from "../../QueryUtils";
 
 export class InsertQuery implements ParameterisedSqlable {
   public insertValues: InsertValue[];
@@ -21,7 +21,7 @@ export class InsertQuery implements ParameterisedSqlable {
   }
 
   public getValues(): Value[] {
-    return this.insertValues.map(v => v.value) as Value[];
+    return this.insertValues.map(v => v.value);
   }
 
   private getSqlColumns(): string {

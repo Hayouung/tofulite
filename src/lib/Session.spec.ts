@@ -5,7 +5,7 @@ import {
   InsertQuery,
   SelectQuery,
   Session
-} from "../src/index";
+} from "../index";
 
 describe("#Session", () => {
   let session: Session;

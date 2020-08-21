@@ -1,16 +1,16 @@
 import { Database } from "sqlite3";
 import { ParameterisedSqlable } from "./interfaces/ParameterisedSqlable";
-import { CreateTableQuery } from "./queries/CreateTableQuery";
-import { DeleteQuery } from "./queries/DeleteQuery";
-import { DropTableQuery } from "./queries/DropTableQuery";
-import { InsertQuery } from "./queries/InsertQuery";
-import { SelectQuery } from "./queries/SelectQuery";
+import { CreateTableQuery } from "./queries/create-table/CreateTableQuery";
+import { DeleteQuery } from "./queries/delete/DeleteQuery";
+import { DropTableQuery } from "./queries/drop-table/DropTableQuery";
+import { InsertQuery } from "./queries/insert/InsertQuery";
+import { SelectQuery } from "./queries/select/SelectQuery";
 
 export class Session {
   public readonly db: Database;
 
-  constructor(filename: Database) {
-    this.db = filename;
+  constructor(db: Database) {
+    this.db = db;
   }
 
   public static inMemory(): Session {

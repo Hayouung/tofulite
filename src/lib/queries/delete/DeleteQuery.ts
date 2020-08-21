@@ -1,6 +1,6 @@
-import { ParameterisedSqlable } from "../interfaces/ParameterisedSqlable";
-import { SelectWhere } from "../interfaces/SelectWhere";
-import { getWheres } from "../QueryUtils";
+import { ParameterisedSqlable } from "../../interfaces/ParameterisedSqlable";
+import { SelectWhere } from "../../interfaces/SelectWhere";
+import { getWheres } from "../../QueryUtils";
 
 export class DeleteQuery implements ParameterisedSqlable {
   public wheres: SelectWhere[];

@@ -1,7 +1,7 @@
-import { OrderBy } from "../interfaces/OrderBy";
-import { ParameterisedSqlable, Value } from "../interfaces/ParameterisedSqlable";
-import { SelectWhere } from "../interfaces/SelectWhere";
-import { getWheres } from "../QueryUtils";
+import { OrderBy } from "../../interfaces/OrderBy";
+import { ParameterisedSqlable, Value } from "../../interfaces/ParameterisedSqlable";
+import { SelectWhere } from "../../interfaces/SelectWhere";
+import { getWheres } from "../../QueryUtils";
 
 export class SelectQuery implements ParameterisedSqlable {
   public columnNames: string[];
