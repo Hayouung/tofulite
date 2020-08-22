@@ -10,8 +10,8 @@ import {
 describe("#Session", () => {
   let session: Session;
 
-  beforeEach(done => {
-    session = Session.inMemory();
+  beforeEach(async done => {
+    session = await Session.inMemory();
     done();
   });
 

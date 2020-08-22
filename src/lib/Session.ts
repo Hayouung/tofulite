@@ -1,4 +1,4 @@
-import { Database } from "sqlite3";
+import type { Database } from "sqlite3";
 import { ParameterisedSqlable } from "./interfaces/ParameterisedSqlable";
 import { CreateTableQuery } from "./queries/create-table/CreateTableQuery";
 import { DeleteQuery } from "./queries/delete/DeleteQuery";
@@ -13,17 +13,18 @@ export class Session {
     this.db = db;
   }
 
-  public static inMemory(): Session {
+  public static inMemory(): Promise<Session> {
     return Session.fromFile(":memory:");
   }
 
-  public static anonymous(): Session {
+  public static anonymous(): Promise<Session> {
     return Session.fromFile("");
   }
 
-  public static fromFile(filename: string): Session {
+  public static async fromFile(filename: string): Promise<Session> {
+    const sqlite3 = await import("sqlite3");
     return new this(
-      new Database(filename || "", err => {
+      new sqlite3.Database(filename || "", err => {
         if (err) throw err;
       })
     );

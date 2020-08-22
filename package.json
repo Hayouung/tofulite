@@ -19,8 +19,8 @@
     "prepare": "npm run build",
     "test": "ts-node --project tsconfig.spec.json jasmine.ts"
   },
-  "dependencies": {
-    "sqlite3": "^4.2.0"
+  "peerDependencies": {
+    "sqlite3": "^5.0.0"
   },
   "devDependencies": {
     "@types/jasmine": "^3.5.13",
@@ -30,6 +30,7 @@
     "del-cli": "^3.0.1",
     "eslint": "^6.8.0",
     "jasmine": "^3.6.1",
+    "sqlite3": "^5.0.0",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.7"
   }
