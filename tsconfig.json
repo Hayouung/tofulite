@@ -15,7 +15,8 @@
     "noUnusedLocals": true,
     "noImplicitReturns": true,
     "inlineSourceMap": true,
-    "declaration": true
+    "declaration": true,
+    "moduleResolution": "node"
   },
   "exclude": ["node_modules", "dist", "**/*spec.ts", "jasmine.ts"]
 }

@@ -1,7 +1,4 @@
-import { Session } from "../index";
-import { createTable } from "./queries/create-table/create-table";
-import { insertInto } from "./queries/insert/insert";
-import { selectFrom } from "./queries/select/select";
+import { Session, createTable, insertInto, selectFrom } from "../index";
 
 describe("session", () => {
   let session: Session;
