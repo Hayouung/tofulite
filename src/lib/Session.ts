@@ -1,4 +1,4 @@
-import type { Database } from "sqlite3";
+import { Database } from "sqlite3";
 import { ParameterisedQuery, Query, QueryFn } from "./query";
 import { SelectQuery, selectFrom } from "./queries/select/select";
 import { InsertQuery, insertInto } from "./queries/insert/insert";
