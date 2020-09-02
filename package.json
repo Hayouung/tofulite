@@ -1,6 +1,6 @@
 {
-  "name": "ts-sqlite",
-  "version": "1.0.0",
+  "name": "tofulite",
+  "version": "0.0.1",
   "description": "sqlite wrapper written in TypeScript",
   "author": "hayouung",
   "license": "MIT",
@@ -11,7 +11,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hayouung/ts-sqlite.git"
+    "url": "git+https://github.com/Hayouung/tofulite.git"
   },
   "scripts": {
     "lint-fix": "eslint src/**/*.ts --fix",

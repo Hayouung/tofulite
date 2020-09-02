@@ -1,6 +1,6 @@
-# ts-sqlite
+# tofulite
 
-A wrapper for the [sqlite3](https://www.npmjs.com/package/sqlite3) module written in TypeScript because SQL scripts are hard to remember.
+tofulite is a wrapper for [sqlite3](https://www.npmjs.com/package/sqlite3) (Node) written in TypeScript because SQL scripts are hard to remember.
 
 ![CI Status](https://travis-ci.org/Hayouung/ts-sqlite.svg?branch=master)
 
@@ -18,13 +18,15 @@ There are 5 total query objects for the following SQL operations:
 - Select\* (`SelectQuery`)
 - Delete\* (`DeleteQuery`)
 
-Each of these can be turned into an SQL query in string format by calling `getSql()` so they could be used for other databases besides just sqlite as they are fairly basic queries.
+Each of these can be turned into an SQL query in string format by calling `sql()` so they could be used for other databases besides sqlite as they are fairly basic queries.
 
-Queries marked with \* are parameterised - these return the string format with ?s in them for any value when you call `getSql()` and you can get the values separately by calling `getValues()`.
+Queries marked with \* are parameterised - these return the string format with ?s in them for any value when you call `sql()` and you can get the values separately by calling `parameters()`.
 
 ### Session
 
 `Session` is simply a class that wraps an instance of a `sqlite3.Database`. You can use this class to run the query objects without turning them into strings/raw SQL. `Session` serves more as a helper class - it is completely possible to use all the query objects without ever touching this class.
+
+If you want to make use of `Session`, you will need to make sure you have `sqlite3` installed as a dependency yourself as it is a peer dependency of this package.
 
 You can instantiate a new instance of `Session` in 4 different ways:
 
@@ -32,3 +34,12 @@ You can instantiate a new instance of `Session` in 4 different ways:
 - `Session.inMemory()` - equivalent to `new sqlite3.Database(":memory:")`
 - `Session.anonymous()` - equivalent to `new sqlite3.Database("")`
 - `Session.fromFile(filename)` - equivalent to `new sqlite3.Database(filename)`
+
+### Stuff for future
+
+- definitely need to make wheres better
+- joins
+- constraints
+- alter
+- jsdoc comments
+- update this readme more

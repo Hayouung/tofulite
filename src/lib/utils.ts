@@ -1,6 +1,6 @@
-import { SelectWhere } from "./interfaces/SelectWhere";
+import { Where } from "./where";
 
-export function getWheres(wheres: SelectWhere[]): string {
+export function getWheres(wheres: Where[]): string {
   if (wheres.length === 0) {
     return "";
   }
@@ -23,9 +23,9 @@ export function getWheres(wheres: SelectWhere[]): string {
     str += index === 0 ? "" : ` ${where.type} `;
 
     if (where.value instanceof Array) {
-      str += `${where.columnName} IN (${getQuestionMarks(where.value)})`;
+      str += `${where.column} IN (${getQuestionMarks(where.value)})`;
     } else {
-      str += `${where.columnName} ${where.operator || "="} ?`;
+      str += `${where.column} ${where.operator || "="} ?`;
     }
   });
 

@@ -1,13 +1,9 @@
-import {
-  CreateTableQuery,
-  DeleteQuery,
-  DropTableQuery,
-  InsertQuery,
-  SelectQuery,
-  Session
-} from "../index";
+import { Session } from "../index";
+import { createTable } from "./queries/create-table/create-table";
+import { insertInto } from "./queries/insert/insert";
+import { selectFrom } from "./queries/select/select";
 
-describe("#Session", () => {
+describe("session", () => {
   let session: Session;
 
   beforeEach(async done => {
@@ -15,151 +11,134 @@ describe("#Session", () => {
     done();
   });
 
-  describe("create tables", () => {
+  describe("using callback query functions", () => {
     beforeEach(() => {
-      session.createTable(
-        new CreateTableQuery("TABLE_ONE", true).addColumns([
-          { name: "COLUMN_ONE", type: "TEXT" },
-          { name: "COLUMN_TWO", type: "INTEGER" }
-        ])
+      session.createTable(table => table("TABLE_ONE")
+        .ifNotExists()
+        .column({ name: "COLUMN_ONE", type: "TEXT" })
+        .column({ name: "COLUMN_TWO", type: "INTEGER" })
       );
 
-      session.createTable(
-        new CreateTableQuery("TABLE_TWO", true).addColumns([
-          { name: "HELLO", type: "TEXT" },
-          { name: "HI", type: "INTEGER" }
-        ])
+      session.createTable(table => table("TABLE_TWO")
+        .ifNotExists()
+        .column({ name: "HELLO", type: "TEXT" })
+        .column({ name: "HI", type: "INTEGER" })
       );
     });
 
-    it("should create tables", done => {
-      session.getTables().then(tables => {
-        expect(tables.length).toBe(2);
-        expect(tables[0]).toBe("TABLE_ONE");
-        expect(tables[1]).toBe("TABLE_TWO");
-        done();
-      });
+    it("should create tables", async done => {
+      const tables = await session.getTables();
+
+      expect(tables.length).toBe(2);
+      expect(tables[0]).toBe("TABLE_ONE");
+      expect(tables[1]).toBe("TABLE_TWO");
+      done();
     });
 
     describe("insert and select rows", () => {
       beforeEach(() => {
-        session.insert(
-          new InsertQuery("TABLE_ONE").setValues([
-            { columnName: "COLUMN_ONE", value: 1 },
-            { columnName: "COLUMN_TWO", value: 2 }
-          ])
+        session.insert(into => into("TABLE_ONE")
+          .value({ column: "COLUMN_ONE", value: 1 })
+          .value({ column: "COLUMN_TWO", value: 2 })
         );
 
-        session.insert(
-          new InsertQuery("TABLE_ONE").setValues([
-            { columnName: "COLUMN_ONE", value: 3 },
-            { columnName: "COLUMN_TWO", value: 4 }
-          ])
+        session.insert(into => into("TABLE_ONE")
+          .value({ column: "COLUMN_ONE", value: 3 })
+          .value({ column: "COLUMN_TWO", value: 4 })
         );
 
-        session.insert(
-          new InsertQuery("TABLE_ONE").setValues([
-            { columnName: "COLUMN_ONE", value: 5 },
-            { columnName: "COLUMN_TWO", value: 6 }
-          ])
+        session.insert(into => into("TABLE_ONE")
+          .value({ column: "COLUMN_ONE", value: 5 })
+          .value({ column: "COLUMN_TWO", value: 6 })
         );
       });
 
-      it("should select all rows", done => {
-        const sq = new SelectQuery("TABLE_ONE");
+      it("should select all rows", async done => {
+        const result = await session.select(from => from("TABLE_ONE"));
 
-        session.select(sq).then(a => {
-          expect(a.length).toEqual(3);
-          expect(a[0]).toEqual({ COLUMN_ONE: "1", COLUMN_TWO: 2 });
-          expect(a[1]).toEqual({ COLUMN_ONE: "3", COLUMN_TWO: 4 });
-          expect(a[2]).toEqual({ COLUMN_ONE: "5", COLUMN_TWO: 6 });
-          done();
-        });
+        expect(result.length).toEqual(3);
+        expect(result[0]).toEqual({ COLUMN_ONE: "1", COLUMN_TWO: 2 });
+        expect(result[1]).toEqual({ COLUMN_ONE: "3", COLUMN_TWO: 4 });
+        expect(result[2]).toEqual({ COLUMN_ONE: "5", COLUMN_TWO: 6 });
+        done();
       });
 
-      it("should select all rows with where on integer column", done => {
-        const sq = new SelectQuery("TABLE_ONE");
-        sq.addWhere({ columnName: "COLUMN_TWO", value: 2, operator: ">", type: "AND" });
+      it("should select all rows with where on integer column", async done => {
+        const result = await session.select(from => from("TABLE_ONE")
+          .where({ column: "COLUMN_TWO", value: 2, operator: ">", type: "AND" })
+        );
 
-        session.select(sq).then(a => {
-          expect(a.length).toEqual(2);
-          expect(a[0]).toEqual({ COLUMN_ONE: "3", COLUMN_TWO: 4 });
-          expect(a[1]).toEqual({ COLUMN_ONE: "5", COLUMN_TWO: 6 });
-          done();
-        });
+        expect(result.length).toEqual(2);
+        expect(result[0]).toEqual({ COLUMN_ONE: "3", COLUMN_TWO: 4 });
+        expect(result[1]).toEqual({ COLUMN_ONE: "5", COLUMN_TWO: 6 });
+        done();
       });
 
-      it("should select all rows with where on text column(s)", done => {
-        const sq = new SelectQuery("TABLE_ONE");
-        sq.addWheres([
-          { columnName: "COLUMN_ONE", value: "3", type: "AND" },
-          { columnName: "COLUMN_ONE", value: ["3", "5"], type: "OR" }
-        ]);
-        session.select(sq).then(a => {
-          expect(a.length).toEqual(2);
-          expect(a[0]).toEqual({ COLUMN_ONE: "3", COLUMN_TWO: 4 });
-          done();
-        });
+      it("should select all rows with where on text column(s)", async done => {
+        const result = await session.select(from => from("TABLE_ONE")
+          .where({ column: "COLUMN_ONE", value: "3", type: "AND" })
+          .where({ column: "COLUMN_ONE", value: ["3", "5"], type: "OR" })
+        );
+
+        expect(result.length).toEqual(2);
+        expect(result[0]).toEqual({ COLUMN_ONE: "3", COLUMN_TWO: 4 });
+        done();
       });
 
-      it("should order by ascending by default and select one row", done => {
-        const sq = new SelectQuery("TABLE_ONE");
-        sq.setOrder("COLUMN_TWO");
+      it("should order by ascending and select one row", async done => {
+        const result = await session.selectSingle(from => from("TABLE_ONE")
+          .order("COLUMN_TWO", "ASC")
+        );
 
-        session.selectSingle(sq).then(a => {
-          expect(a).toEqual({ COLUMN_ONE: "1", COLUMN_TWO: 2 });
-          done();
-        });
+        expect(result).toEqual({ COLUMN_ONE: "1", COLUMN_TWO: 2 });
+        done();
       });
 
-      it("should order by descending and select one row", done => {
-        const sq = new SelectQuery("TABLE_ONE");
-        sq.setOrder("COLUMN_TWO", true);
+      it("should order by descending and select one row", async done => {
+        const result = await session.selectSingle(from => from("TABLE_ONE")
+          .order("COLUMN_TWO", "DESC")
+        );
 
-        session.selectSingle(sq).then(a => {
-          expect(a).toEqual({ COLUMN_ONE: "5", COLUMN_TWO: 6 });
-          done();
-        });
+        expect(result).toEqual({ COLUMN_ONE: "5", COLUMN_TWO: 6 });
+        done();
       });
 
-      it("should limit results", done => {
-        session.select(new SelectQuery("TABLE_ONE").setLimit(2)).then(a => {
-          expect(a.length).toBe(2);
-          done();
-        });
+      it("should limit results", async done => {
+        const result = await session.select(from => from("TABLE_ONE")
+          .limit(2)
+        );
+
+        expect(result.length).toBe(2);
+        done();
       });
 
       describe("delete rows", () => {
         beforeEach(() => {
-          session.delete(
-            new DeleteQuery("TABLE_ONE").addWheres([
-              { columnName: "COLUMN_ONE", type: "AND", value: "3" }
-            ])
+          session.delete(from => from("TABLE_ONE")
+            .where({ column: "COLUMN_ONE", type: "AND", value: "3" })
           );
         });
 
-        it("should have delete row", done => {
-          const sq = new SelectQuery("TABLE_ONE");
+        it("should have delete row", async done => {
+          const result = await session.select(from => from("TABLE_ONE"));
 
-          session.select(sq).then(a => {
-            expect(a.length).toEqual(2);
-            expect(a[0]).toEqual({ COLUMN_ONE: "1", COLUMN_TWO: 2 });
-            expect(a[1]).toEqual({ COLUMN_ONE: "5", COLUMN_TWO: 6 });
-            done();
-          });
+          expect(result.length).toEqual(2);
+          expect(result[0]).toEqual({ COLUMN_ONE: "1", COLUMN_TWO: 2 });
+          expect(result[1]).toEqual({ COLUMN_ONE: "5", COLUMN_TWO: 6 });
+          done();
         });
 
         describe("drop table", () => {
           beforeEach(() => {
-            session.dropTable(new DropTableQuery("TABLE_TWO"));
+            session.dropTable(table => table("TABLE_TWO"));
           });
 
-          it("should drop table", done => {
-            session.getTables().then(tables => {
-              expect(tables.length).toBe(1);
-              expect(tables[0]).toBe("TABLE_ONE");
-              done();
-            });
+          it("should drop table", async done => {
+            const tables = await session.getTables();
+
+            expect(tables.length).toBe(1);
+            expect(tables[0]).toBe("TABLE_ONE");
+            done();
           });
 
           describe("attach connection", () => {
@@ -170,15 +149,45 @@ describe("#Session", () => {
               done();
             });
 
-            it("should create new instance of Session with an existing db connection", done => {
-              attached.getTables().then(tables => {
-                expect(tables.length).toBe(1);
-                expect(tables[0]).toBe("TABLE_ONE");
-                done();
-              });
+            it("should create new instance of Session with an existing db connection", async done => {
+              const tables = await attached.getTables();
+
+              expect(tables.length).toBe(1);
+              expect(tables[0]).toBe("TABLE_ONE");
+              done();
             });
           });
         });
+      });
+    });
+  });
+
+  describe("directly using query functions", () => {
+    beforeEach(() => {
+      session.run(createTable("TABLE_ONE")
+        .ifNotExists()
+        .column({ name: "COLUMN_ONE", type: "TEXT" })
+        .column({ name: "COLUMN_TWO", type: "INTEGER" }));
+    });
+
+    it("should create a table", async done => {
+      const tables = await session.getTables();
+
+      expect(tables.length).toBe(1);
+      done();
+    });
+
+    describe("insert and select rows", () => {
+      beforeEach(() => {
+        session.run(insertInto("TABLE_ONE")
+          .value({ column: "COLUMN_ONE", value: "hello" }));
+      });
+
+      it("should select row", async done => {
+        const result = await session.get(selectFrom("TABLE_ONE"));
+
+        expect(result).toEqual({ COLUMN_ONE: "hello", COLUMN_TWO: null })
+        done();
       });
     });
   });
