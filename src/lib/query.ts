@@ -8,3 +8,5 @@ export interface ParameterisedQuery {
 }
 
 export type Parameter = string | number;
+
+export type QueryFn<T> = (fn: (table: string) => T) => T;

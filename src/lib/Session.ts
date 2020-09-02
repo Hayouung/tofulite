@@ -1,12 +1,10 @@
 import type { Database } from "sqlite3";
-import { ParameterisedQuery, Query } from "./query";
+import { ParameterisedQuery, Query, QueryFn } from "./query";
 import { SelectQuery, selectFrom } from "./queries/select/select";
 import { InsertQuery, insertInto } from "./queries/insert/insert";
 import { CreateTableQuery, createTable } from "./queries/create-table/create-table";
 import { DeleteQuery, deleteFrom } from "./queries/delete/delete";
 import { DropTableQuery, dropTable } from "./queries/drop-table/drop-table";
-
-type QueryFn<T> = (fn: (table: string) => T) => T;
 
 export class Session {
   readonly db: Database;
