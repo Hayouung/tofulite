@@ -8,7 +8,7 @@ describe("delete query", () => {
     expect(dq.parameters()).toEqual([]);
   });
 
-  it("should get sql and values for delete query with wheres", () => {
+  it("should get sql and parameters for delete query with wheres", () => {
     const dq = deleteFrom("TABLE_NAME")
       .where({ column: "COLUMN_NAME", type: "AND", value: "TEXT" });
     
