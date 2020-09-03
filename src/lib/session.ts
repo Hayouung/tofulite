@@ -1,10 +1,10 @@
-import { Database } from "sqlite3";
-import { ParameterisedQuery, Query, QueryFn } from "./lib/query";
-import { SelectQuery, selectFrom } from "./lib/queries/select/select";
-import { InsertQuery, insertInto } from "./lib/queries/insert/insert";
-import { CreateTableQuery, createTable } from "./lib/queries/create-table/create-table";
-import { DeleteQuery, deleteFrom } from "./lib/queries/delete/delete";
-import { DropTableQuery, dropTable } from "./lib/queries/drop-table/drop-table";
+import type { Database } from "sqlite3";
+import { ParameterisedQuery, Query, QueryFn } from "./query";
+import { SelectQuery, selectFrom } from "./queries/select/select";
+import { InsertQuery, insertInto } from "./queries/insert/insert";
+import { CreateTableQuery, createTable } from "./queries/create-table/create-table";
+import { DeleteQuery, deleteFrom } from "./queries/delete/delete";
+import { DropTableQuery, dropTable } from "./queries/drop-table/drop-table";
 
 export class Session {
   readonly db: Database;

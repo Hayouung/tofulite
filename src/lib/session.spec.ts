@@ -1,4 +1,4 @@
-import { Session, createTable, insertInto, selectFrom } from "./index";
+import { Session, createTable, insertInto, selectFrom } from "../index";
 
 describe("session", () => {
   let session: Session;
