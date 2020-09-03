@@ -1,4 +1,6 @@
 import { Session, createTable, insertInto, selectFrom } from "../index";
+import { deleteFrom } from "./queries/delete/delete";
+import { dropTable } from "./queries/drop-table/drop-table";
 
 describe("session", () => {
   let session: Session;
@@ -185,6 +187,32 @@ describe("session", () => {
 
         expect(result).toEqual({ COLUMN_ONE: "hello", COLUMN_TWO: null })
         done();
+      });
+
+      describe("delete row", () => {
+        beforeEach(() => {
+          session.run(deleteFrom("TABLE_ONE"));
+        });
+
+        it("should delete rows", async done => {
+          const result = await session.all(selectFrom("TABLE_ONE"));
+
+          expect(result.length).toEqual(0);
+          done();
+        });
+
+        describe("drop table", () => {
+          beforeEach(() => {
+            session.run(dropTable("TABLE_ONE"));
+          });
+  
+          it("should drop table", async done => {
+            const result = await session.getTables();
+  
+            expect(result.length).toEqual(0);
+            done();
+          });
+        });
       });
     });
   });
