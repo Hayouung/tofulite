@@ -38,7 +38,7 @@ export class CreateTableQuery implements Query {
   }
 }
 
-export function createTable(table: string) {
+export function createTable(table: string): CreateTableQuery {
   return new CreateTableQuery(table);
 }
 

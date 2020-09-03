@@ -73,19 +73,19 @@ export class Session {
     });
   }
 
-  createTable(fn: QueryFn<CreateTableQuery>) {
+  createTable(fn: QueryFn<CreateTableQuery>): void {
     this.run(fn(createTable));
   }
 
-  insert(fn: QueryFn<InsertQuery>) {
+  insert(fn: QueryFn<InsertQuery>): void {
     this.run(fn(insertInto));
   }
 
-  delete(fn: QueryFn<DeleteQuery>) {
+  delete(fn: QueryFn<DeleteQuery>): void {
     this.run(fn(deleteFrom));
   }
 
-  dropTable(fn: QueryFn<DropTableQuery>) {
+  dropTable(fn: QueryFn<DropTableQuery>): void {
     this.run(fn(dropTable));
   }
 

@@ -26,6 +26,6 @@ export class DeleteQuery implements ParameterisedQuery {
   }
 }
 
-export function deleteFrom(table: string) {
+export function deleteFrom(table: string): DeleteQuery {
   return new DeleteQuery(table);
 }

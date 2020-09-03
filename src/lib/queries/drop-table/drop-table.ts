@@ -12,6 +12,6 @@ export class DropTableQuery implements Query {
   }
 }
 
-export function dropTable(table: string) {
+export function dropTable(table: string): DropTableQuery {
   return new DropTableQuery(table);
 }

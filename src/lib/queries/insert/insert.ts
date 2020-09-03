@@ -27,7 +27,7 @@ export class InsertQuery implements ParameterisedQuery {
   }
 }
 
-export function insertInto(table: string) {
+export function insertInto(table: string): InsertQuery {
   return new InsertQuery(table);
 }
 

@@ -14,9 +14,10 @@
     "url": "git+https://github.com/Hayouung/tofulite.git"
   },
   "scripts": {
+    "lint": "eslint src/**/*.ts",
     "lint-fix": "eslint src/**/*.ts --fix",
     "build": "del-cli dist && tsc",
-    "test": "ts-node --project tsconfig.spec.json jasmine.ts"
+    "test": "npm run lint && ts-node --project tsconfig.spec.json jasmine.ts"
   },
   "peerDependencies": {
     "sqlite3": "^5.0.0"

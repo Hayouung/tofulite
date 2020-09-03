@@ -70,7 +70,7 @@ export class SelectQuery implements ParameterisedQuery {
   }
 }
 
-export function selectFrom(table: string) {
+export function selectFrom(table: string): SelectQuery {
   return new SelectQuery(table);
 }
 
