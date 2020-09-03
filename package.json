@@ -16,7 +16,6 @@
   "scripts": {
     "lint-fix": "eslint src/**/*.ts --fix",
     "build": "del-cli dist && tsc",
-    "prepare": "npm run build",
     "test": "ts-node --project tsconfig.spec.json jasmine.ts"
   },
   "peerDependencies": {
