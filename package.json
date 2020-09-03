@@ -1,7 +1,7 @@
 {
   "name": "tofulite",
   "version": "0.0.1",
-  "description": "sqlite wrapper written in TypeScript",
+  "description": "SQL query wrapper with sqlite support",
   "author": "hayouung",
   "license": "MIT",
   "main": "./dist/index.js",

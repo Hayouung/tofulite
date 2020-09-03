@@ -1,8 +1,8 @@
 # tofulite
 
-tofulite is a wrapper for [sqlite3](https://www.npmjs.com/package/sqlite3) (Node) written in TypeScript because SQL scripts are hard to remember.
+tofulite is an SQL query wrapper library with support for [sqlite3](https://www.npmjs.com/package/sqlite3) written in TypeScript because SQL scripts are hard to remember.
 
-![CI Status](https://travis-ci.org/Hayouung/ts-sqlite.svg?branch=master)
+![CI Status](https://travis-ci.org/Hayouung/tofulite.svg?branch=master)
 
 ## API
 
