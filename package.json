@@ -1,6 +1,6 @@
 {
   "name": "tofulite",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "SQL query wrapper with sqlite support",
   "author": "hayouung",
   "license": "MIT",
