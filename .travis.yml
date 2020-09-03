@@ -22,9 +22,13 @@ after_success:
 
 deploy:
   - provider: releases
-    api_key: $GITHUB_TOKEN
-    file_glob: true
+    edge: true
+    token: $GITHUB_TOKEN
     file: "{tofulite}-*.tgz"
-    skip_cleanup: true
+    on:
+      tags: true
+  - provider: npm
+    edge: true
+    api_token: $NPM_TOKEN
     on:
       tags: true
